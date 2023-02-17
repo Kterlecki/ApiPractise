@@ -1,0 +1,19 @@
+@id=00000000-0000-0000-0000-000000000000
+PUT  http://localhost:5000/breakfasts/{{id}}
+Content-Type: application/json
+
+{
+    "name": "Great breakfast",
+    "description": "This breakfast contains nutrients",
+    "startDateTime": "2023-02-17T08:00:00",
+    "endDateTime": "2023-02-17T11:00:00",
+    "savory": [
+        "Oatmeal",
+        "Avocado Toast",
+        "Omelette",
+        "Salad"
+    ],
+    "Sweet": [
+        "Fruit"
+    ]
+}
