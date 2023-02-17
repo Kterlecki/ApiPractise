@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SuperBreakfast.Contracts.Breakfast;
+using SuperBreakfast.Models;
+using SuperBreakfast.Services.Breakfasts;
 
 namespace SuperBreakfasts.Controllers;
 
@@ -7,10 +9,43 @@ namespace SuperBreakfasts.Controllers;
 [Route("[controller]")]
 public class BreakfastsController : ControllerBase
 {
-    [HttpPost()]
+    private readonly IBreakfastService _breakfastService;
+
+    public BreakfastsController(IBreakfastService breakfastService)
+    {
+        _breakfastService = breakfastService;
+    }
+
+    [HttpPost]
     public IActionResult CreateBreakfast(CreateBreakfastRequest request)
     {
-        return Ok(request);
+        
+        var breakfast = new Breakfast(
+            Guid.NewGuid(),
+            request.Name,
+            request.Description,
+            request.StartDateTime,
+            request.EndDateTime,
+            DateTime.UtcNow,
+            request.Savory,
+            request.Sweet);
+
+        _breakfastService.CreateBreakfast(breakfast);
+        
+        var response = new BreakfastResponse(
+            breakfast.Id,
+            breakfast.Name,
+            breakfast.Description,
+            breakfast.StartDateTime,
+            breakfast.EndDateTime,
+            breakfast.LastModifiedDateTime,
+            breakfast.Savory,
+            breakfast.Sweet);
+
+        return CreatedAtAction(
+            actionName: nameof(GetBreakfast),
+            routeValues: new { id = breakfast.Id},
+            value: request);
     }
 
     [HttpGet("{id:guid}")]
