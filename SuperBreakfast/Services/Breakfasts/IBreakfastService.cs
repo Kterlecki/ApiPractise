@@ -5,5 +5,6 @@ namespace SuperBreakfast.Services.Breakfasts;
 public interface IBreakfastService
 {
     public void CreateBreakfast(Breakfast breakfast);
+
     Breakfast GetBreakfast(Guid id);
 }

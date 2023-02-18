@@ -45,12 +45,15 @@ public class BreakfastsController : ControllerBase
         return CreatedAtAction(
             actionName: nameof(GetBreakfast),
             routeValues: new { id = breakfast.Id},
+
             value: response);
+
     }
 
     [HttpGet("{id:guid}")]
     public IActionResult GetBreakfast(Guid id)
     {
+
         Breakfast breakfast = _breakfastService.GetBreakfast(id);
 
         var response = new BreakfastResponse(
@@ -63,6 +66,7 @@ public class BreakfastsController : ControllerBase
             breakfast.Savory,
             breakfast.Sweet);
         return Ok(response);
+
     }
 
     [HttpPut("{id:guid}")]
