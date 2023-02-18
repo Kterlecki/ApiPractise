@@ -1,3 +1,4 @@
+using ErrorOr;
 using SuperBreakfast.Models;
 
 namespace SuperBreakfast.Services.Breakfasts;
@@ -5,6 +6,7 @@ namespace SuperBreakfast.Services.Breakfasts;
 public interface IBreakfastService
 {
     public void CreateBreakfast(Breakfast breakfast);
-
-    Breakfast GetBreakfast(Guid id);
+    void DeleteBreakFast(Guid id);
+    ErrorOr<Breakfast> GetBreakfast(Guid id);
+    void UpsertBreakfast(Breakfast breakfast);
 }

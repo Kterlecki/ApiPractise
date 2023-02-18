@@ -1,4 +1,6 @@
+using ErrorOr;
 using SuperBreakfast.Models;
+using SuperBreakfast.ServiceErrors;
 
 namespace SuperBreakfast.Services.Breakfasts;
 
@@ -12,10 +14,22 @@ public class BreakfastService : IBreakfastService
         _breakfasts.Add(breakfast.Id, breakfast);
     }
 
-    public Breakfast GetBreakfast(Guid id)
+    public ErrorOr<Breakfast> GetBreakfast(Guid id)
     {
-        return _breakfasts[id];
-        //return _breakfasts.Values.FirstOrDefault(b => b.Id == id) ?? throw new KeyNotFoundException("Breakfast with Id provided, not found");
+        if (_breakfasts.TryGetValue(id, out var breakfast))
+        {
+            return breakfast;
+        }
+        return Errors.Breakfast.NotFound;
     }
 
+    public void UpsertBreakfast(Breakfast breakfast)
+    {
+        _breakfasts[breakfast.Id] = breakfast;
+    }
+
+    public void DeleteBreakFast(Guid id)
+    {
+        _breakfasts.Remove(id);
+    }
 }
