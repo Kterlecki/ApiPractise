@@ -1,9 +1,9 @@
-@id=00000000-0000-0000-0000-000000000000
+@id=978cb192-3654-4c38-ab8c-680375f02df0
 PUT  http://localhost:5000/breakfasts/{{id}}
 Content-Type: application/json
 
 {
-    "name": "Great breakfast",
+    "name": "Great breakfast Test 2",
     "description": "This breakfast contains nutrients",
     "startDateTime": "2023-02-17T08:00:00",
     "endDateTime": "2023-02-17T11:00:00",
