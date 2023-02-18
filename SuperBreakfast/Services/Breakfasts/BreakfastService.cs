@@ -18,4 +18,13 @@ public class BreakfastService : IBreakfastService
         //return _breakfasts.Values.FirstOrDefault(b => b.Id == id) ?? throw new KeyNotFoundException("Breakfast with Id provided, not found");
     }
 
+    public void UpsertBreakfast(Breakfast breakfast)
+    {
+        _breakfasts[breakfast.Id] = breakfast;
+    }
+
+    public void DeleteBreakFast(Guid id)
+    {
+        _breakfasts.Remove(id);
+    }
 }
