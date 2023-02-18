@@ -45,13 +45,28 @@ public class BreakfastsController : ControllerBase
         return CreatedAtAction(
             actionName: nameof(GetBreakfast),
             routeValues: new { id = breakfast.Id},
-            value: request);
+
+            value: response);
+
     }
 
     [HttpGet("{id:guid}")]
     public IActionResult GetBreakfast(Guid id)
     {
-        return Ok(id);
+
+        Breakfast breakfast = _breakfastService.GetBreakfast(id);
+
+        var response = new BreakfastResponse(
+            breakfast.Id,
+            breakfast.Name,
+            breakfast.Description,
+            breakfast.StartDateTime,
+            breakfast.EndDateTime,
+            breakfast.LastModifiedDateTime,
+            breakfast.Savory,
+            breakfast.Sweet);
+        return Ok(response);
+
     }
 
     [HttpPut("{id:guid}")]

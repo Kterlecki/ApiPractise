@@ -15,4 +15,11 @@ Content-Type: application/json
     "Sweet": [
         "Fruit"
     ]
+
 }
+
+###
+GET https://localhost:5001/Breakfasts/ffc8a53a-cc94-4282-b171-128609478d1e
+
+}
+
