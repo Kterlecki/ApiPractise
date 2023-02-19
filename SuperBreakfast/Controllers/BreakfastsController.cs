@@ -32,22 +32,16 @@ public class BreakfastsController : ApiController
             request.Savory,
             request.Sweet);
 
-        _breakfastService.CreateBreakfast(breakfast);
-        
-        var response = new BreakfastResponse(
-            breakfast.Id,
-            breakfast.Name,
-            breakfast.Description,
-            breakfast.StartDateTime,
-            breakfast.EndDateTime,
-            breakfast.LastModifiedDateTime,
-            breakfast.Savory,
-            breakfast.Sweet);
+        ErrorOr<Created> createBreakfastResult = _breakfastService.CreateBreakfast(breakfast);
 
+        if(createBreakfastResult.IsError)
+        {
+            return Problem(createBreakfastResult.Errors);
+        }
         return CreatedAtAction(
             actionName: nameof(GetBreakfast),
             routeValues: new { id = breakfast.Id},
-            value: response);
+            value: mapBreakfastResponse(breakfast));
     }
 
     [HttpGet("{id:guid}")]
