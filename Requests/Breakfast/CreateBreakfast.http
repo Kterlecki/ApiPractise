@@ -2,8 +2,8 @@ Post http://localhost:5000/breakfasts
 Content-Type: application/json
 
 {
-    "name": "Great breakfast",
-    "description": "This breakfast contains nutrients",
+    "name": "G",
+    "description": "Ths",
     "startDateTime": "2023-02-17T08:00:00",
     "endDateTime": "2023-02-17T11:00:00",
     "savory": [
