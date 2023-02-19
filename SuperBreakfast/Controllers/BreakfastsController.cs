@@ -1,15 +1,15 @@
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using SuperBreakfast.Contracts.Breakfast;
+using SuperBreakfast.Controllers;
 using SuperBreakfast.Models;
 using SuperBreakfast.ServiceErrors;
 using SuperBreakfast.Services.Breakfasts;
 
 namespace SuperBreakfasts.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class BreakfastsController : ControllerBase
+
+public class BreakfastsController : ApiController
 {
     private readonly IBreakfastService _breakfastService;
 
