@@ -1,4 +1,5 @@
 using ErrorOr;
+using SuperBreakfast.Contracts.Breakfast;
 using SuperBreakfast.ServiceErrors;
 
 namespace SuperBreakfast.Models;
@@ -19,14 +20,16 @@ public class Breakfast
     public List<string> Savory { get; }
     public List<string> Sweet { get; }
 
-    private Breakfast(Guid id,
-                     string name,
-                     string description,
-                     DateTime startDateTime,
-                     DateTime endDateTime,
-                     DateTime lastModifiedDateTime,
-                     List<string> savory,
-                     List<string> sweet)
+    private Breakfast(
+        Guid id,
+        string name,
+        string description,
+        DateTime startDateTime,
+        DateTime endDateTime,
+        DateTime lastModifiedDateTime,
+        List<string> savory,
+        List<string> sweet)
+
     {
         Id = id;
         Name = name;
@@ -43,9 +46,9 @@ public class Breakfast
         string description,
         DateTime startDateTime,
         DateTime endDateTime,
-        DateTime lastModifiedDateTime,
         List<string> savory,
-        List<string> sweet)
+        List<string> sweet,
+        Guid? id =null)
     {
         List<Error> errors = new();
         if(name.Length is < MinNameLenght or >MaxNameLenght)
@@ -62,7 +65,7 @@ public class Breakfast
         }
         
         return new Breakfast(
-            Guid.NewGuid(),
+            id ?? Guid.NewGuid(),
             name,
             description,
             startDateTime,
@@ -70,6 +73,30 @@ public class Breakfast
             DateTime.UtcNow,
             savory,
             sweet);
+    }
+
+    public static ErrorOr<Breakfast> From(CreateBreakfastRequest request)
+    {
+        return Create(
+            request.Name,
+            request.Description,
+            request.StartDateTime,
+            request.EndDateTime,
+            request.Savory,
+            request.Sweet
+        );
+    }
+    public static ErrorOr<Breakfast> From(Guid id, UpsertBreakfastRequest request)
+    {
+        return Create(
+            request.Name,
+            request.Description,
+            request.StartDateTime,
+            request.EndDateTime,
+            request.Savory,
+            request.Sweet,
+            id
+        );
     }
 
 }

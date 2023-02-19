@@ -1,10 +1,10 @@
-@id=893095a4-b0d9-4d81-9db4-ca2fa109f7dc
+@id=47ec33cc-d218-4dfa-92ef-38861d495717
 PUT  http://localhost:5000/breakfasts/{{id}}
 Content-Type: application/json
 
 {
     "name": "Its now dinner time",
-    "description": "This breakfast contains nutrients",
+    "description": "This breakfast contains nutrients aaaaaaaaaaaaaaaaaaaaaaaaaa",
     "startDateTime": "2023-02-17T08:00:00",
     "endDateTime": "2023-02-17T11:00:00",
     "savory": [
