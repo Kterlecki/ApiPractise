@@ -1,7 +1,14 @@
+using ErrorOr;
+using SuperBreakfast.ServiceErrors;
+
 namespace SuperBreakfast.Models;
 
 public class Breakfast
 {
+    public const int MinNameLenght = 3;
+    public const int MaxNameLenght = 50;
+    public const int MinDescriptionLenght = 50;
+    public const int MaxDescriptionLenght = 150;
     
     public Guid Id { get; }
     public string Name { get; }
@@ -12,7 +19,7 @@ public class Breakfast
     public List<string> Savory { get; }
     public List<string> Sweet { get; }
 
-    public Breakfast(Guid id,
+    private Breakfast(Guid id,
                      string name,
                      string description,
                      DateTime startDateTime,
@@ -29,6 +36,40 @@ public class Breakfast
         LastModifiedDateTime = lastModifiedDateTime;
         Savory = savory;
         Sweet = sweet;
+    }
+
+    public static ErrorOr<Breakfast> Create(
+        string name,
+        string description,
+        DateTime startDateTime,
+        DateTime endDateTime,
+        DateTime lastModifiedDateTime,
+        List<string> savory,
+        List<string> sweet)
+    {
+        List<Error> errors = new();
+        if(name.Length is < MinNameLenght or >MaxNameLenght)
+        {
+            errors.Add(Errors.Breakfast.InvalidName);
+        }
+        if(description.Length is < MinDescriptionLenght or >MaxDescriptionLenght)
+        {
+            errors.Add(Errors.Breakfast.InvalidDescription);
+        }
+        if( errors.Count > 0)
+        {
+            return errors;
+        }
+        
+        return new Breakfast(
+            Guid.NewGuid(),
+            name,
+            description,
+            startDateTime,
+            endDateTime,
+            DateTime.UtcNow,
+            savory,
+            sweet);
     }
 
 }
