@@ -56,23 +56,32 @@ public class BreakfastsController : ControllerBase
 
         ErrorOr<Breakfast> getBreakfastResult = _breakfastService.GetBreakfast(id);
 
-        if(getBreakfastResult.IsError &&
-            getBreakfastResult.FirstError == Errors.Breakfast.NotFound)
-        {
-            return NotFound();
-        }
-        var breakfast = getBreakfastResult.Value;
-        var response = new BreakfastResponse(
-            breakfast.Id,
-            breakfast.Name,
-            breakfast.Description,
-            breakfast.StartDateTime,
-            breakfast.EndDateTime,
-            breakfast.LastModifiedDateTime,
-            breakfast.Savory,
-            breakfast.Sweet);
-        return Ok(response);
+        return getBreakfastResult.Match(
+            breakfast => Ok(mapBreakfastResponse(breakfast)),
+            errors => Problem()
+        );
+        // if (getBreakfastResult.IsError &&
+        //     getBreakfastResult.FirstError == Errors.Breakfast.NotFound)
+        // {
+        //     return NotFound();
+        // }
+        // var breakfast = getBreakfastResult.Value;
+        // BreakfastResponse response = mapBreakfastResponse(breakfast);
+        // return Ok(response);
 
+    }
+
+    private static BreakfastResponse mapBreakfastResponse(Breakfast breakfast)
+    {
+        return new BreakfastResponse(
+                    breakfast.Id,
+                    breakfast.Name,
+                    breakfast.Description,
+                    breakfast.StartDateTime,
+                    breakfast.EndDateTime,
+                    breakfast.LastModifiedDateTime,
+                    breakfast.Savory,
+                    breakfast.Sweet);
     }
 
     [HttpPut("{id:guid}")]
