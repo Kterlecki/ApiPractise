@@ -37,5 +37,6 @@ public class BreakfastService : IBreakfastService
         _breakfasts.Remove(id);
 
         return Result.Deleted;
+
     }
 }
