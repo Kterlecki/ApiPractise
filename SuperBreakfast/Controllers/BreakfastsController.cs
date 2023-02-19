@@ -58,7 +58,7 @@ public class BreakfastsController : ApiController
 
         return getBreakfastResult.Match(
             breakfast => Ok(mapBreakfastResponse(breakfast)),
-            errors => Problem()
+            errors => Problem(errors)
         );
         // if (getBreakfastResult.IsError &&
         //     getBreakfastResult.FirstError == Errors.Breakfast.NotFound)
