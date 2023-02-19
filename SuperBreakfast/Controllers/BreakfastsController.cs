@@ -1,13 +1,15 @@
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using SuperBreakfast.Contracts.Breakfast;
+using SuperBreakfast.Controllers;
 using SuperBreakfast.Models;
+using SuperBreakfast.ServiceErrors;
 using SuperBreakfast.Services.Breakfasts;
 
 namespace SuperBreakfasts.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class BreakfastsController : ControllerBase
+
+public class BreakfastsController : ApiController
 {
     private readonly IBreakfastService _breakfastService;
 
@@ -52,19 +54,34 @@ public class BreakfastsController : ControllerBase
     public IActionResult GetBreakfast(Guid id)
     {
 
-        Breakfast breakfast = _breakfastService.GetBreakfast(id);
+        ErrorOr<Breakfast> getBreakfastResult = _breakfastService.GetBreakfast(id);
 
-        var response = new BreakfastResponse(
-            breakfast.Id,
-            breakfast.Name,
-            breakfast.Description,
-            breakfast.StartDateTime,
-            breakfast.EndDateTime,
-            breakfast.LastModifiedDateTime,
-            breakfast.Savory,
-            breakfast.Sweet);
-        return Ok(response);
+        return getBreakfastResult.Match(
+            breakfast => Ok(mapBreakfastResponse(breakfast)),
+            errors => Problem(errors)
+        );
+        // if (getBreakfastResult.IsError &&
+        //     getBreakfastResult.FirstError == Errors.Breakfast.NotFound)
+        // {
+        //     return NotFound();
+        // }
+        // var breakfast = getBreakfastResult.Value;
+        // BreakfastResponse response = mapBreakfastResponse(breakfast);
+        // return Ok(response);
 
+    }
+
+    private static BreakfastResponse mapBreakfastResponse(Breakfast breakfast)
+    {
+        return new BreakfastResponse(
+                    breakfast.Id,
+                    breakfast.Name,
+                    breakfast.Description,
+                    breakfast.StartDateTime,
+                    breakfast.EndDateTime,
+                    breakfast.LastModifiedDateTime,
+                    breakfast.Savory,
+                    breakfast.Sweet);
     }
 
     [HttpPut("{id:guid}")]
