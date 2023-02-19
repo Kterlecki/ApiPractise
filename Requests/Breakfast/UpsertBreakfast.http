@@ -1,9 +1,9 @@
-@id=978cb192-3654-4c38-ab8c-680375f02df0
+@id=893095a4-b0d9-4d81-9db4-ca2fa109f7dc
 PUT  http://localhost:5000/breakfasts/{{id}}
 Content-Type: application/json
 
 {
-    "name": "Great breakfast Test 2",
+    "name": "Its now dinner time",
     "description": "This breakfast contains nutrients",
     "startDateTime": "2023-02-17T08:00:00",
     "endDateTime": "2023-02-17T11:00:00",

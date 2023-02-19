@@ -38,7 +38,10 @@ public class BreakfastsController : ApiController
         {
             return Problem(createBreakfastResult.Errors);
         }
-        return CreatedAtGetBreakfast(breakfast);
+        return createBreakfastResult.Match(
+            created => CreatedAtGetBreakfast(breakfast),
+            errors => Problem(errors)
+        );
 
     }
 
