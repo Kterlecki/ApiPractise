@@ -15,6 +15,7 @@ public class ServiceTests
     {
         
        var breakfastService = new BreakfastService();
+       var initialCount = breakfastService.GetDictionaryCount();
        var breakfast = Breakfast.Create(
         "Its now dinner time",
         "This breakfast contains nutrients, lots and lost of nutrients",
@@ -31,5 +32,8 @@ public class ServiceTests
     // Assert
     Assert.IsType<Created>(result.Value);
     Assert.IsType<ErrorOr<Created>>(result);
+
+    Assert.Equal(0, initialCount);
+    Assert.Equal(1, breakfastService.GetDictionaryCount());
     }
 }
