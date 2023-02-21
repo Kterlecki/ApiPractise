@@ -40,4 +40,9 @@ public class BreakfastService : IBreakfastService
         return Result.Deleted;
 
     }
+
+    public int GetDictionaryCount()
+    {
+        return _breakfasts.Count();
+    }
 }

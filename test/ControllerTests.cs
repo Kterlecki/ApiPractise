@@ -2,7 +2,7 @@ using Xunit;
 
 namespace SuperBreakfast.tests;
 
-public class UnitTest1
+public class ControllerTests
 {
     [Fact]
     public void Test1()
