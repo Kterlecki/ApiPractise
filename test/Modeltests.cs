@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System;
-using Moq;
 using SuperBreakfast.Models;
 using Xunit;
 using ErrorOr;
@@ -11,7 +10,7 @@ public class ModelTests
 {
     [Fact]
     public void BreakfastCreate_GivenCorrectParamaters_ReturnsBreakfast()
-    {        
+    {
         var name = "Its now dinner time";
         var description = "This breakfast contains nutrients, lots and lost of nutrients";
         var startDateTime = new DateTime(2023, 02, 20, 8, 0, 0);
@@ -37,8 +36,29 @@ public class ModelTests
         Assert.Equal(endDateTime, breakfast.EndDateTime);
         Assert.Equal(savory, breakfast.Savory);
         Assert.Equal(sweet, breakfast.Sweet);
-        
-       
-        
+    }
+
+    [Fact]
+    public void BreakfastCreate_GivenIncorrectParamaters_ReturnsValidationError()
+    {
+        var name = "It";
+        var description = "This breakfast contains nutrients, lots and lost of nutrients";
+        var startDateTime = new DateTime(2023, 02, 20, 8, 0, 0);
+        var endDateTime = new DateTime(2023, 02, 20, 10, 0, 0);
+        var savory = new List<string> { "Oatmeal", "Avocado Toast", "Omelette", "Salad" };
+        var sweet = new List<string> { "Pancakes", "Waffles" };
+
+        var result = Models.Breakfast.Create(name, 
+        description,
+        startDateTime,
+        endDateTime,
+        savory,
+        sweet,
+        Guid.NewGuid()
+        );
+
+        Assert.NotNull(result);
+        Assert.True(result.IsError);
+
     }
 }
