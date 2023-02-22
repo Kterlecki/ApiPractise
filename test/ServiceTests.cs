@@ -67,7 +67,7 @@ public class ServiceTests
     }
 
     [Fact]
-    public void BreakfastDelete_GivenInorrectParamaters_ReturnsValue()
+    public void BreakfastDelete_GivenIncorrectParamaters_ReturnsValue()
     {
        var breakfastService = new BreakfastService();
        var initialCount = breakfastService.GetDictionaryCount();
@@ -85,14 +85,13 @@ public class ServiceTests
     var createResult = breakfastService.CreateBreakfast(breakfast.Value);
     var postCreationCount = breakfastService.GetDictionaryCount();
     var deleteResult = breakfastService.DeleteBreakFast(Guid.NewGuid());
-    
-    var postDeletionCount = breakfastService.GetDictionaryCount();
+
     // Assert
     Assert.IsType<Deleted>(deleteResult.Value);
 
     Assert.Equal(0, initialCount);
     Assert.Equal(1, postCreationCount);
-    Assert.Equal(1, postDeletionCount);
+    Assert.Equal(1, breakfastService.GetDictionaryCount());
     }
 
 }
