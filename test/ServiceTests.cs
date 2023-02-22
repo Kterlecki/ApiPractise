@@ -39,9 +39,8 @@ public class ServiceTests
 
 
     [Fact]
-    public void BreakfastDelete_GivenCorrectParamaters_ReturnsBreakfast()
+    public void BreakfastDelete_GivenInorrectParamaters_ReturnsNotFound()
     {
-        
        var breakfastService = new BreakfastService();
        var initialCount = breakfastService.GetDictionaryCount();
        var breakfast = Breakfast.Create(
@@ -53,18 +52,18 @@ public class ServiceTests
         new List<string> { "Pancakes", "Waffles" },
         Guid.NewGuid()
     );
-    
+
     // Act
     var createResult = breakfastService.CreateBreakfast(breakfast.Value);
     var postCreationCount = breakfastService.GetDictionaryCount();
     var deleteResult = breakfastService.DeleteBreakFast(breakfast.Value.Id);
-    var postDeletionCount = breakfastService.GetDictionaryCount();
+    //var postDeletionCount = breakfastService.GetDictionaryCount();
     // Assert
     Assert.IsType<Deleted>(deleteResult.Value);
 
     Assert.Equal(0, initialCount);
     Assert.Equal(1, postCreationCount);
-    Assert.Equal(0, postDeletionCount);
+    Assert.Equal(0, breakfastService.GetDictionaryCount());
     }
 
 }
