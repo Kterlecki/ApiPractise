@@ -126,5 +126,21 @@ public class ServiceTests
         Assert.IsType<UpsertedBreakfast>(upsertBreakfastResult.Value);
     }
 
+    [Fact]
+    public void BreakfastUpsert_GivenCorrectParamatersWhileBreakfastDoesntExist_ReturnsBreakfast()
+    {
+       var breakfastService = new BreakfastService();
+       var breakfast = CreateBreakfast();
+
+    // Act
+        var upsertBreakfastResult = breakfastService.UpsertBreakfast(breakfast);
+        var dictionaryCount = breakfastService.GetDictionaryCount();
+        ClearDictionary(breakfast, breakfastService);
+
+        // Assert
+        Assert.IsType<UpsertedBreakfast>(upsertBreakfastResult.Value);
+        Assert.Equal(1, dictionaryCount);
+    }
+
 
 }
