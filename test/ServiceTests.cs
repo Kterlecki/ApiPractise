@@ -9,7 +9,7 @@ using ErrorOr;
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace SuperBreakfast.tests;
 
-[Collection("Sequential")]
+
 public class ServiceTests
 {
     private Breakfast CreateBreakfast()
@@ -39,13 +39,13 @@ public class ServiceTests
        var breakfast = CreateBreakfast();
     // Act
         var result = breakfastService.CreateBreakfast(breakfast);
-        var count = breakfastService.GetDictionaryCount();
+        var dictionaryCount = breakfastService.GetDictionaryCount();
         ClearDictionary(breakfast, breakfastService);
 
         // Assert
         Assert.IsType<Created>(result.Value);
         Assert.IsType<ErrorOr<Created>>(result);
-        Assert.Equal(1, count);
+        Assert.Equal(1, dictionaryCount);
     }
 
 
@@ -56,7 +56,7 @@ public class ServiceTests
        var breakfast = CreateBreakfast();
 
     // Act
-        var result = breakfastService.CreateBreakfast(breakfast);
+        var createBreakfast = breakfastService.CreateBreakfast(breakfast);
         var deleteResult = breakfastService.DeleteBreakFast(breakfast.Id);
         var dictionaryCount = breakfastService.GetDictionaryCount();
         ClearDictionary(breakfast, breakfastService);
@@ -74,7 +74,7 @@ public class ServiceTests
        var newGuid = Guid.NewGuid();
 
     // Act
-        var result = breakfastService.CreateBreakfast(breakfast);
+        var createBreakfast = breakfastService.CreateBreakfast(breakfast);
         var deleteResult = breakfastService.DeleteBreakFast(newGuid);
         var dictionaryCount = breakfastService.GetDictionaryCount();
         ClearDictionary(breakfast, breakfastService);
@@ -82,6 +82,23 @@ public class ServiceTests
         // Assert
         Assert.IsType<Deleted>(deleteResult.Value);
         Assert.Equal(1, dictionaryCount);
+    }
+
+    [Fact]
+    public void BreakfastGet_GivenCorrectParamaters_ReturnsBreakfast()
+    {
+       var breakfastService = new BreakfastService();
+       var breakfast = CreateBreakfast();
+
+    // Act
+        var createBreakfast = breakfastService.CreateBreakfast(breakfast);
+        var getBreakfastResult = breakfastService.GetBreakfast(breakfast.Id);
+        
+        ClearDictionary(breakfast, breakfastService);
+
+        // Assert
+        Assert.IsType<Breakfast>(getBreakfastResult.Value);
+        Assert.Equal(getBreakfastResult.Value.Id, breakfast.Id);
     }
 
 }
