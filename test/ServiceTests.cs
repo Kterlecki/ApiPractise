@@ -5,7 +5,6 @@ using Moq;
 using SuperBreakfast.Models;
 using System;
 using System.Collections.Generic;
-using SuperBreakfast.ServiceErrors;
 using ErrorOr;
 
 namespace SuperBreakfast.tests;
@@ -27,6 +26,7 @@ public class ServiceTests
         var result = breakfast.Value;
         return result;
     }
+    
 
     private void ClearDictionary(Breakfast breakfast, BreakfastService breakfastService)
     {
