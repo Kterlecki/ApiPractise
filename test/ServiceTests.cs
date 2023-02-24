@@ -27,6 +27,11 @@ public class ServiceTests
         return result;
     }
 
+    private void ClearDictionary(Breakfast breakfast, BreakfastService breakfastService)
+    {
+        breakfastService.DeleteBreakFast(breakfast.Id);
+    }
+
     [Fact]
     public void BreakfastCreate_GivenCorrectParamaters_ReturnsBreakfast()
     {
@@ -34,11 +39,13 @@ public class ServiceTests
        var breakfast = CreateBreakfast();
     // Act
         var result = breakfastService.CreateBreakfast(breakfast);
+        var count = breakfastService.GetDictionaryCount();
+        ClearDictionary(breakfast, breakfastService);
 
         // Assert
         Assert.IsType<Created>(result.Value);
         Assert.IsType<ErrorOr<Created>>(result);
-        Assert.Equal(1, breakfastService.GetDictionaryCount());
+        Assert.Equal(1, count);
     }
 
 
@@ -50,14 +57,13 @@ public class ServiceTests
 
     // Act
         var result = breakfastService.CreateBreakfast(breakfast);
-        var initialCount = breakfastService.GetDictionaryCount();
         var deleteResult = breakfastService.DeleteBreakFast(breakfast.Id);
-        var postDeletionCount = breakfastService.GetDictionaryCount();
-        breakfastService.ClearDictionary();
+        var dictionaryCount = breakfastService.GetDictionaryCount();
+        ClearDictionary(breakfast, breakfastService);
+
         // Assert
         Assert.IsType<Deleted>(deleteResult.Value);
-        Assert.Equal(1, initialCount);
-        Assert.Equal(0, postDeletionCount);
+        Assert.Equal(0, dictionaryCount);
     }
 
     [Fact]
@@ -70,12 +76,12 @@ public class ServiceTests
     // Act
         var result = breakfastService.CreateBreakfast(breakfast);
         var deleteResult = breakfastService.DeleteBreakFast(newGuid);
-        var count = breakfastService.GetDictionaryCount();
-        breakfastService.ClearDictionary();
+        var dictionaryCount = breakfastService.GetDictionaryCount();
+        ClearDictionary(breakfast, breakfastService);
 
         // Assert
         Assert.IsType<Deleted>(deleteResult.Value);
-        Assert.Equal(1, count);
+        Assert.Equal(1, dictionaryCount);
     }
 
 }
