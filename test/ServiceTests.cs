@@ -5,11 +5,12 @@ using Moq;
 using SuperBreakfast.Models;
 using System;
 using System.Collections.Generic;
+using SuperBreakfast.ServiceErrors;
 using ErrorOr;
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
+
 namespace SuperBreakfast.tests;
 
-[Collection("Sequential")]
+
 public class ServiceTests
 {
     private Breakfast CreateBreakfast()
@@ -27,6 +28,11 @@ public class ServiceTests
         return result;
     }
 
+    private void ClearDictionary(Breakfast breakfast, BreakfastService breakfastService)
+    {
+        breakfastService.DeleteBreakFast(breakfast.Id);
+    }
+
     [Fact]
     public void BreakfastCreate_GivenCorrectParamaters_ReturnsBreakfast()
     {
@@ -34,11 +40,13 @@ public class ServiceTests
        var breakfast = CreateBreakfast();
     // Act
         var result = breakfastService.CreateBreakfast(breakfast);
+        var dictionaryCount = breakfastService.GetDictionaryCount();
+        ClearDictionary(breakfast, breakfastService);
 
         // Assert
         Assert.IsType<Created>(result.Value);
         Assert.IsType<ErrorOr<Created>>(result);
-        Assert.Equal(1, breakfastService.GetDictionaryCount());
+        Assert.Equal(1, dictionaryCount);
     }
 
 
@@ -49,15 +57,14 @@ public class ServiceTests
        var breakfast = CreateBreakfast();
 
     // Act
-        var result = breakfastService.CreateBreakfast(breakfast);
-        var initialCount = breakfastService.GetDictionaryCount();
+        var createBreakfast = breakfastService.CreateBreakfast(breakfast);
         var deleteResult = breakfastService.DeleteBreakFast(breakfast.Id);
-        var postDeletionCount = breakfastService.GetDictionaryCount();
-        breakfastService.ClearDictionary();
+        var dictionaryCount = breakfastService.GetDictionaryCount();
+        ClearDictionary(breakfast, breakfastService);
+
         // Assert
         Assert.IsType<Deleted>(deleteResult.Value);
-        Assert.Equal(1, initialCount);
-        Assert.Equal(0, postDeletionCount);
+        Assert.Equal(0, dictionaryCount);
     }
 
     [Fact]
@@ -68,14 +75,42 @@ public class ServiceTests
        var newGuid = Guid.NewGuid();
 
     // Act
-        var result = breakfastService.CreateBreakfast(breakfast);
+        var createBreakfast = breakfastService.CreateBreakfast(breakfast);
         var deleteResult = breakfastService.DeleteBreakFast(newGuid);
-        var count = breakfastService.GetDictionaryCount();
-        breakfastService.ClearDictionary();
+        var dictionaryCount = breakfastService.GetDictionaryCount();
+        ClearDictionary(breakfast, breakfastService);
 
         // Assert
         Assert.IsType<Deleted>(deleteResult.Value);
-        Assert.Equal(1, count);
+        Assert.Equal(1, dictionaryCount);
     }
+
+    [Fact]
+    public void BreakfastGet_GivenCorrectParamaters_ReturnsBreakfast()
+    {
+       var breakfastService = new BreakfastService();
+       var breakfast = CreateBreakfast();
+
+    // Act
+        var createBreakfast = breakfastService.CreateBreakfast(breakfast);
+        var getBreakfastResult = breakfastService.GetBreakfast(breakfast.Id);
+        ClearDictionary(breakfast, breakfastService);
+
+        // Assert
+        Assert.IsType<Breakfast>(getBreakfastResult.Value);
+        Assert.Equal(getBreakfastResult.Value.Id, breakfast.Id);
+    }
+    [Fact]
+    public void BreakfastGet_GivenIncorrectParamaters_ReturnsNotFound()
+    {
+       var breakfastService = new BreakfastService();
+       var newGuid = Guid.NewGuid();
+    // Act
+        var getBreakfastResult = breakfastService.GetBreakfast(newGuid);
+
+        // Assert
+        Assert.True(getBreakfastResult.IsError);
+    }
+
 
 }

@@ -45,8 +45,4 @@ public class BreakfastService : IBreakfastService
     {
         return _breakfasts.Count();
     }
-    public void ClearDictionary()
-    {
-        _breakfasts.Clear();
-    }
 }
