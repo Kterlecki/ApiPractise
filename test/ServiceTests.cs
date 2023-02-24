@@ -49,7 +49,6 @@ public class ServiceTests
         Assert.Equal(1, dictionaryCount);
     }
 
-
     [Fact]
     public void BreakfastDelete_GivenCorrectParamaters_ReturnsNotFound()
     {
@@ -110,6 +109,37 @@ public class ServiceTests
 
         // Assert
         Assert.True(getBreakfastResult.IsError);
+    }
+
+    [Fact]
+    public void BreakfastUpsert_GivenCorrectParamaters_ReturnsBreakfast()
+    {
+       var breakfastService = new BreakfastService();
+       var breakfast = CreateBreakfast();
+
+    // Act
+        var createBreakfast = breakfastService.CreateBreakfast(breakfast);
+        var upsertBreakfastResult = breakfastService.UpsertBreakfast(breakfast);
+        ClearDictionary(breakfast, breakfastService);
+
+        // Assert
+        Assert.IsType<UpsertedBreakfast>(upsertBreakfastResult.Value);
+    }
+
+    [Fact]
+    public void BreakfastUpsert_GivenCorrectParamatersWhileBreakfastDoesntExist_ReturnsBreakfast()
+    {
+       var breakfastService = new BreakfastService();
+       var breakfast = CreateBreakfast();
+
+    // Act
+        var upsertBreakfastResult = breakfastService.UpsertBreakfast(breakfast);
+        var dictionaryCount = breakfastService.GetDictionaryCount();
+        ClearDictionary(breakfast, breakfastService);
+
+        // Assert
+        Assert.IsType<UpsertedBreakfast>(upsertBreakfastResult.Value);
+        Assert.Equal(1, dictionaryCount);
     }
 
 

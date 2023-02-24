@@ -43,6 +43,6 @@ public class BreakfastService : IBreakfastService
 
     public int GetDictionaryCount()
     {
-        return _breakfasts.Count();
+        return _breakfasts.Count;
     }
 }
