@@ -5,8 +5,9 @@ using Moq;
 using SuperBreakfast.Models;
 using System;
 using System.Collections.Generic;
+using SuperBreakfast.ServiceErrors;
 using ErrorOr;
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
+
 namespace SuperBreakfast.tests;
 
 
@@ -93,12 +94,23 @@ public class ServiceTests
     // Act
         var createBreakfast = breakfastService.CreateBreakfast(breakfast);
         var getBreakfastResult = breakfastService.GetBreakfast(breakfast.Id);
-        
         ClearDictionary(breakfast, breakfastService);
 
         // Assert
         Assert.IsType<Breakfast>(getBreakfastResult.Value);
         Assert.Equal(getBreakfastResult.Value.Id, breakfast.Id);
     }
+    [Fact]
+    public void BreakfastGet_GivenIncorrectParamaters_ReturnsNotFound()
+    {
+       var breakfastService = new BreakfastService();
+       var newGuid = Guid.NewGuid();
+    // Act
+        var getBreakfastResult = breakfastService.GetBreakfast(newGuid);
+
+        // Assert
+        Assert.True(getBreakfastResult.IsError);
+    }
+
 
 }
