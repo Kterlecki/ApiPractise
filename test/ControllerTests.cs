@@ -45,4 +45,31 @@ public class ControllerTests
         Assert.Equal(request.Savory, actualBreakfast.Savory);
         Assert.Equal(request.Sweet, actualBreakfast.Sweet);
     }
+
+    [Fact]
+    public void ControllerCreateBreakfast_GivenIncorrectParameters_ReturnsError()
+    {
+        var name = "It";
+        var description = "This breakfast contains nutrients, lots and lost of nutrients";
+        var startDateTime = DateTime.Now;
+        var endDateTime = DateTime.Now.AddHours(1);
+        var savory = new List<string> { "Bacon", "Sausage" };
+        var sweet = new List<string> { "Maple syrup", "Whipped cream" };
+
+        var request = new CreateBreakfastRequest(
+            Name: name,
+            Description: description,
+            StartDateTime: startDateTime,
+            EndDateTime: endDateTime,
+            Savory: savory,
+            Sweet: sweet
+        );
+        var breakfastService = new Mock<IBreakfastService>();
+        var breakfastController = new BreakfastsController(breakfastService.Object);
+
+        var result = breakfastController.CreateBreakfast(request);
+        
+        var createdAtActionResult = Assert.IsType<ObjectResult>(result);
+        var actualBreakfast = Assert.IsType<ValidationProblemDetails>(createdAtActionResult.Value);
+    }
 }
